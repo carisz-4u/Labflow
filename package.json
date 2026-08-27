@@ -1,0 +1,22 @@
+{
+  "name": "asetlab",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Sistem Manajemen Aset Internal Lab - full-stack (Express + MySQL)",
+  "main": "server/index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.23.2"
+  }
+}

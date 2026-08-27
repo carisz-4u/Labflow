@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASETLAB — Manajemen Aset Internal Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="js/vendor/chart.umd.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-brand">
+    <div>
+      <div class="brandmark">
+        <div class="mark"><img src="img/logo-pens.png" alt="Logo PENS"></div>
+        <div class="word">ASETLAB</div>
+      </div>
+      <h1>Pinjam Dan Kembalikan Barang Dengan Mudah</h1>
+          <div class="eyebrow" id="view-eyebrow">Ringkasan</div>
+          <h1 id="view-title">Dashboard</h1>
+        </div>
+      </div>
+    </div>
+
+    <!-- DBadmin -->
+    <section class="view" id="view-dashboard">
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="k-label">Jenis Aset</div><div class="k-value" id="kpi-jenis">0</div><div class="k-sub">Total item terdaftar</div></div>
+        <div class="kpi-card"><div class="k-label">Total Unit</div><div class="k-value" id="kpi-unit">0</div><div class="k-sub">Seluruh unit fisik</div></div>
+        <div class="kpi-card accent"><div class="k-label">Sedang Dipinjam</div><div class="k-value" id="kpi-dipinjam">0</div><div class="k-sub" id="kpi-dipinjam-sub">0 transaksi aktif</div></div>
+        <div class="kpi-card"><div class="k-label">Tersedia</div><div class="k-value" id="kpi-tersedia">0</div><div class="k-sub">Siap dipinjamkan</div></div>
+      </div>
+
+      <div class="chart-row">
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h3>Aktivitas per Tanggal</h3>
+              <div class="card-sub">Unit dipinjam vs. dikembalikan setiap tanggal</div>
+            </div>
+            <div class="range-toggle" id="range-toggle">
+              <button data-range="7">7H</button>
+              <button data-range="30" class="active">30H</button>
+              <button data-range="90">90H</button>
+              <button data-range="all">Semua</button>
+            </div>
+          </div>
+          <div class="chart-wrap"><canvas id="chart-activity"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>Status Ketersediaan Aset</h3>
+          <div class="card-sub">Distribusi seluruh unit saat ini</div>
+          <div class="chart-wrap" style="height:210px;margin-top:8px;"><canvas id="chart-status"></canvas></div>
+        </div>
+      </div>
+
+      <div class="chart-row" style="grid-template-columns:1fr 1.3fr;">
+        <div class="card">
+          <h3>Total Barang per Kategori</h3>
+          <div class="card-sub">Jumlah unit aset berdasarkan kategori</div>
+          <div class="chart-wrap" style="margin-top:8px;"><canvas id="chart-kategori"></canvas></div>
+        </div>
+        <div class="card">
+          <h3>Barang Sedang Dipinjam</h3>
+          <div class="card-sub">Item yang sedang berada di luar (belum dikembalikan)</div>
+          <div class="table-wrap scroll-table" style="margin-top:12px;box-shadow:none;">
+            <table>
+              <thead><tr><th>Barang</th><th>Jumlah</th><th>Peminjam</th><th>Sejak</th><th>Status</th></tr></thead>
+              <tbody id="active-items-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DATA ASET -->
+    <section class="view" id="view-aset">
+      <div class="toolbar">
+        <div class="toolbar-filters">
+          <div class="search-box">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="aset-search" placeholder="Cari nama barang atau lokasi...">
+          </div>
+          <select class="select-filter" id="aset-filter-kategori"><option value="">Semua Kategori</option></select>
+          <select class="select-filter" id="aset-filter-ketersediaan">
+            <option value="">Semua Ketersediaan</option>
+            <option value="tersedia">Tersedia</option>
+            <option value="sebagian">Dipinjam Sebagian</option>
+            <option value="habis">Habis Dipinjam</option>
+            <option value="maintenance">Maintenance</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" id="btn-tambah-aset" onclick="openAsetModal()">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Tambah Aset
+        </button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead id="aset-table-head">
+            <tr><th>Kode</th><th>Nama Barang</th><th>Kategori</th><th>Lokasi</th><th>Jumlah</th><th>Tersedia</th><th>Ketersediaan</th><th></th></tr>
+          </thead>
+          <tbody id="aset-table-body"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="aset-pagination"></div>
+    </section>
+
+    <!-- PEMINJAMAN -->
+    <section class="view" id="view-peminjaman">
+      <div class="subtabs">
+        <button data-ptab="form" class="active" onclick="switchPeminjamanTab('form')">Ajukan Peminjaman</button>
+        <button data-ptab="list" id="ptab-list-label" onclick="switchPeminjamanTab('list')">Daftar Peminjaman</button>
+      </div>
+
+      <div id="ptab-form">
+        <div class="card" style="max-width:760px;">
+          <h3>Form Pengajuan Peminjaman Aset</h3>
+          <p class="card-sub">Lengkapi data berikut, lalu cetak bukti setelah pengajuan berhasil.</p>
+          <form id="peminjaman-form" style="margin-top:18px;">
+            <div class="form-grid">
+              <div class="field"><label>Nama Peminjam</label><input type="text" id="pj-nama" required autocomplete="off"></div>
+              <div class="field"><label>Kategori Peminjam</label>
+                <select id="pj-kategori" required>
+                  <option value="Dosen">Dosen</option>
+                  <option value="Tendik">Tenaga Kependidikan</option>
+                  <option value="Mahasiswa">Mahasiswa</option>
+                </select>
+              </div>
+              <div class="field"><label id="pj-identitas-label">NIP / NIM</label><input type="text" id="pj-identitas" required inputmode="numeric" autocomplete="off"></div>
+              <div class="field"><label>No. HP / Kontak</label><input type="text" id="pj-kontak" required inputmode="numeric" autocomplete="off"></div>
+              <div class="field"><label>Tanggal Pinjam</label><input type="date" id="pj-tgl-pinjam" required></div>
+              <div class="field"><label>Rencana Tanggal Kembali</label><input type="date" id="pj-tgl-kembali" required></div>
+              <div class="field full"><label>Keperluan</label><textarea id="pj-keperluan" required placeholder="mis. Praktikum Jaringan Komputer"></textarea></div>
+            </div>
+
+            <div style="margin-top:8px;">
+              <label style="display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:8px;">Daftar Barang Dipinjam</label>
+              <div id="item-rows"></div>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="addItemRow()">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Tambah Barang
+              </button>
+            </div>
+
+            <div id="pj-form-error" class="login-error" style="display:none;"></div>
+            <div class="modal-actions" style="border-top:none;justify-content:flex-start;padding-top:20px;">
+              <button type="submit" class="btn btn-primary">Ajukan &amp; Cetak Bukti</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="ptab-list" class="hidden">
+        <div class="toolbar">
+          <div class="toolbar-filters">
+            <div class="search-box">
+              <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="loan-search" placeholder="Cari kode atau nama peminjam...">
+            </div>
+            <select class="select-filter" id="loan-filter-status">
+              <option value="">Semua Status</option>
+              <option value="Dipinjam">Dipinjam</option>
+              <option value="Terlambat">Terlambat</option>
+              <option value="Menunggu Konfirmasi">Menunggu Konfirmasi</option>
+              <option value="Dikembalikan">Dikembalikan</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Kode</th><th>Peminjam</th><th>Kategori</th><th>Tgl Pinjam</th><th>Rencana Kembali</th><th>Item</th><th>Status</th><th></th></tr></thead>
+            <tbody id="loan-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PENGEMBALIAN -->
+    <section class="view" id="view-pengembalian">
+      <div id="pengembalian-pending-section" class="hidden" style="margin-bottom:26px;">
+        <h3 style="margin-bottom:2px;">Menunggu Konfirmasi</h3>
+        <div class="card-sub" style="margin-bottom:14px;">Pengembalian yang diajukan pengguna — stok belum berubah sampai dikonfirmasi.</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Kode</th><th>Peminjam</th><th>Item &amp; Kondisi</th><th>Diajukan</th><th></th></tr></thead>
+            <tbody id="pending-return-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3 id="pengembalian-aktif-title" style="margin-bottom:2px;">Peminjaman Aktif</h3>
+      <div class="card-sub" style="margin-bottom:14px;">Daftar peminjaman aktif yang menunggu dikembalikan.</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kode</th><th>Peminjam</th><th>Tgl Pinjam</th><th>Rencana Kembali</th><th>Item</th><th>Status</th><th></th></tr></thead>
+          <tbody id="return-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- manajemen pengguna -->
+    <section class="view" id="view-users">
+      <div class="toolbar">
+        <div class="toolbar-filters">
+          <div class="search-box">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="user-search" placeholder="Cari username, nama, atau kategori...">
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="openUserModal()">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Tambah Pengguna
+        </button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Username</th><th>Nama</th><th>Role</th><th>Kategori</th><th>Identitas</th><th></th></tr></thead>
+          <tbody id="users-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div id="modal-root"></div>
+<div id="toast-stack"></div>
+<div id="print-area"></div>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
