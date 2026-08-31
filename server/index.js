@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.use('/api', (req, res) => res.status(404).json({ error: 'Endpoint tidak ditemukan.' }));
 
-// eslint-disable-next-line no-unused-vars
+
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ error: 'Terjadi kesalahan pada server.' });
