@@ -115,16 +115,8 @@ async function seedIfEmpty() {
   const [u5] = await pool.query('INSERT INTO users (username,password_hash,nama,role,kategori,identitas) VALUES (?,?,?,?,?,?)', ['kelasA', hash('kelasA123'), 'Akun Bersama Kelas A', 'user', 'Mahasiswa', '-']);
 
   const assetsSeed = [
-    ['Laptop Dell Latitude 5420', 'Peralatan 1', 10, 'Lab Komputer 1'],
-    ['PC Desktop Rakitan Core i5', 'Peralatan 1', 15, 'Lab Komputer 2'],
-    ['Proyektor Epson EB-X05', 'Peralatan 2', 4, 'Gudang Aset'],
-    ['Multimeter Digital Sanwa CD800a', 'Peralatan 2', 8, 'Lab Elektronika'],
-    ['Osiloskop Tektronix TBS1052B', 'Peralatan 2', 3, 'Lab Elektronika'],
-    ['Solder Station Quick 861DW', 'Peralatan 3', 6, 'Lab Elektronika'],
-    ['Mikroskop Digital USB 1000x', 'Peralatan 3', 5, 'Lab Biologi'],
-    ['Router Mikrotik RB750Gr3', 'Sarana Penunjang Lab', 6, 'Lab Jaringan'],
-    ['Kabel LAN Cat6 (roll 305m)', 'Bahan Umum', 12, 'Gudang Aset'],
-    ['Tang Crimping RJ45', 'Peralatan 3', 7, 'Lab Jaringan']
+    ['nama barang', 'kategori', 1, 'lokasi'],
+    
   ];
   const assetIds = {};
   for (let i = 0; i < assetsSeed.length; i++) {
@@ -157,10 +149,7 @@ async function seedIfEmpty() {
     }
   }
 
-  await seedLoan('PJM-0001', -3, 2, 'Andi Wijaya', 'Mahasiswa', '2110511034', '081200000003', 'Praktikum Jaringan Komputer', u4.insertId, [['Multimeter Digital Sanwa CD800a', 1], ['Kabel LAN Cat6 (roll 305m)', 2]]);
-  await seedLoan('PJM-0002', -10, -3, 'Siti Aminah, A.Md', 'Tendik', '199001152015032002', '081200000002', 'Perbaikan Jaringan Gedung B', u3.insertId, [['Tang Crimping RJ45', 1], ['Router Mikrotik RB750Gr3', 1]]);
-  await seedLoan('PJM-0003', -14, -10, 'Dr. Budi Santoso, M.Kom', 'Dosen', '198203102010121001', '081200000001', 'Kuliah Tamu Sistem Tertanam', u2.insertId, [['Proyektor Epson EB-X05', 1]], -9, u1.insertId);
-
+ 
   console.log('[seed] Selesai. Login demo: admin/admin123, dosen1/dosen123, tendik1/tendik123, mhs1/mhs123, kelasA/kelasA123');
 }
 
