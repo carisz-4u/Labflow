@@ -813,7 +813,7 @@ function buildPeminjamanDoc(l){
     '<table style="width:100%;border-collapse:collapse;"><thead><tr><th>Nama Barang</th><th style="width:80px;">Jumlah</th></tr></thead><tbody>'+itemsRows+'</tbody></table>'+
     '<div class="sign-row">'+
       '<div class="sign-box">Peminjam<div class="sign-line">'+escapeHtml(l.nama_peminjam)+'</div></div>'+
-      '<div class="sign-box">PLP<div class="sign-line">&nbsp;</div></div>'+
+      '<div class="sign-box">Sarana Prasarana<div class="sign-line">&nbsp;</div></div>'+
     '</div>'+
   '</div>';
 }
