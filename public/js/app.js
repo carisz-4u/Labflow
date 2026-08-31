@@ -834,7 +834,7 @@ function buildPengembalianDoc(l){
     '<table style="width:100%;border-collapse:collapse;"><thead><tr><th>Nama Barang</th><th style="width:80px;">Jumlah</th><th style="width:100px;">Kondisi</th></tr></thead><tbody>'+itemsRows+'</tbody></table>'+
     '<div class="sign-row">'+
       '<div class="sign-box">Yang Mengembalikan<div class="sign-line">'+escapeHtml(l.nama_peminjam)+'</div></div>'+
-      '<div class="sign-box">PLP<div class="sign-line">&nbsp;</div></div>'+
+      '<div class="sign-box">Sarana Prasarana<div class="sign-line">&nbsp;</div></div>'+
     '</div>'+
   '</div>';
 }
