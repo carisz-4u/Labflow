@@ -3,29 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ASETLAB — Manajemen Aset Internal Lab</title>
+<title>LABFLOW</title>
+<link rel="icon" href="img/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="js/vendor/chart.umd.js"></script>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
+<!--===LOGIN===-->
 <div id="login-screen">
   <div class="login-brand">
     <div>
       <div class="brandmark">
-        <div class="mark"><img src="img/LOGO.png" alt="Logo"></div>
-        <div class="word">ASETLAB</div>
+        <div class="mark"><img src="img/logo-pens.png" alt="Logo PENS"></div>
+        <div class="word">LABFLOW</div>
       </div>
       <h1>Pinjam Dan Kembalikan Barang Dengan Mudah</h1>
+      <p class="sub">Pinjam Barang Yang Anda Butuhkan Dengan Mengajukan Peminjaman dan Jangan Lupa Kembalikan Seperti Keadaan Awal dan Tepat Waktu.</p>
+      <div class="login-feats">
+        <div class="login-feat"><span class="dot"></span><span>Login dengan akun Anda</span></div>
+        <div class="login-feat"><span class="dot"></span><span>Ajukan peminjaman</span></div>
+        <div class="login-feat"><span class="dot"></span><span>Kembalikan barang tepat waktu</span></div>
+      </div>
+    </div>
+    <div class="foot">LABFLOW</div>
+  </div>
+  <div class="login-panel">
+    <div class="login-card">
+      <h2>Masuk ke akun Anda</h2>
+      <p class="desc">Gunakan akun yang diberikan oleh admin laboratorium.</p>
+      <form id="login-form">
+        <div class="field">
+          <label>Username</label>
+          <input type="text" id="login-username" autocomplete="username" required placeholder="nama akun">
+        </div>
+        <div class="field">
+          <label>Kata sandi</label>
+          <input type="password" id="login-password" autocomplete="current-password" required placeholder="••••••••">
+        </div>
+        <div class="login-error" id="login-error"></div>
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top:20px;">Masuk</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="app">
+  <div class="sidebar-backdrop" onclick="toggleSidebar()"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="brandmark">
+      <div class="mark"><img src="img/logo.png" alt="Logo"></div>
+      <div class="word">LABFLOW</div>
+    </div>
+    <div id="nav-container"></div>
+    <div class="sidebar-foot">
+      <div class="user-chip">
+        <div class="user-avatar" id="user-avatar">–</div>
+        <div class="user-meta">
+          <div class="name" id="user-name">–</div>
+          <div class="role" id="user-role">–</div>
+        </div>
+      </div>
+      <button class="btn logout-btn btn-sm" onclick="logout()">
+        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Keluar
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="hamburger" onclick="toggleSidebar()">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div>
           <div class="eyebrow" id="view-eyebrow">Ringkasan</div>
           <h1 id="view-title">Dashboard</h1>
         </div>
       </div>
     </div>
 
-    <!-- DBadmin -->
+    <!-- DASHBOARD (admin) -->
     <section class="view" id="view-dashboard">
       <div class="kpi-grid">
         <div class="kpi-card"><div class="k-label">Jenis Aset</div><div class="k-value" id="kpi-jenis">0</div><div class="k-sub">Total item terdaftar</div></div>
@@ -202,7 +263,7 @@
       </div>
     </section>
 
-    <!-- manajemen pengguna -->
+    <!-- USERS (admin) -->
     <section class="view" id="view-users">
       <div class="toolbar">
         <div class="toolbar-filters">
