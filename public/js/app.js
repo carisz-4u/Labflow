@@ -57,7 +57,7 @@ function closeModal(){ document.getElementById('modal-root').innerHTML=''; }
 function initials(name){
   return (name||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
 }
-/** Wrap an api.* promise: shows a toast on error, force-logout on 401, rethrows so callers can bail out. */
+
 async function guard(promise){
   try{
     return await promise;
@@ -125,8 +125,7 @@ function buildNav(){
 
 function toggleSidebar(){
   document.getElementById('app').classList.toggle('sidebar-open');
-  // Chart.js tidak selalu menangkap ukuran akhir kontainer saat lebarnya berubah lewat
-  // transisi CSS, jadi paksa semua grafik menghitung ulang ukurannya setelah animasi selesai.
+
   setTimeout(resizeAllCharts, 230);
 }
 function resizeAllCharts(){
@@ -184,10 +183,7 @@ function statusBadgeClass(label){
 let asetCurrentPage = 1;
 const ASET_PAGE_SIZE = 10;
 
-/**
- * Status ketersediaan efektif: 'Maintenance' (manual, admin) selalu menang.
- * Selain itu dihitung otomatis: habis (tersedia=0) < sebagian (tersedia <= dipinjam) < tersedia.
- */
+
 function ketersediaanInfo(a){
   if(a.status_admin==='Maintenance') return {key:'maintenance', label:'Maintenance', cls:'badge-neutral'};
   const dipinjam = a.jumlah_total - a.jumlah_tersedia - (a.jumlah_rusak||0);
@@ -196,7 +192,7 @@ function ketersediaanInfo(a){
   return {key:'tersedia', label:'Tersedia', cls:'badge-success'};
 }
 
-/** Komponen pagination generik yang bisa dipakai ulang untuk tabel manapun. */
+
 function renderPagination(containerId, totalItems, pageSize, currentPage, onPageChange){
   const container = document.getElementById(containerId);
   if(!container) return;
@@ -267,7 +263,7 @@ document.getElementById('aset-filter-kategori').addEventListener('change', reset
 document.getElementById('aset-filter-ketersediaan').addEventListener('change', resetAsetPageAndRender);
 
 function kondisiBadgeClass(label){ return label==='Rusak Sebagian' ? 'badge-danger' : 'badge-success'; }
-/** Jaga-jaga: kalau data lama/cache tidak punya kondisi_info, jangan sampai "undefined" muncul di layar. */
+
 function kondisiLabel(a){ return a.kondisi_info || 'Baik'; }
 
 function renderAsetTable(){
@@ -395,7 +391,7 @@ function openAsetModal(id){
   document.getElementById('aset-form').addEventListener('submit', function(e){ saveAsetForm(e, id); });
 }
 
-/** Mengecilkan & mengompresi gambar jadi data URL base64 supaya ukurannya wajar disimpan di database. */
+
 function readImageCompressed(file, maxDim, quality){
   return new Promise(function(resolve, reject){
     const reader = new FileReader();
